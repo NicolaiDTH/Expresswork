@@ -1,13 +1,16 @@
 'use strict';
 
 var express = require('express');
-    posts = require('./mock/posts.json');
+var posts = require('./mock/posts.json');
 
 var app = express();
 
+app.set('view engine', 'jade');
+app.set('views', __dirname + '/templates')
+
 app.get('/', function (req, res) {
- res.send("<h1>I am in love Treehouse!</h1>")
-})
+ res.render('index');
+});
 
 app.get('/blog/:title?', function(req, res) {
  var title = req.params.title;
@@ -15,11 +18,11 @@ app.get('/blog/:title?', function(req, res) {
   res.status(503);
   res.send("This page is under construction") 
   } else {
-    var post = posts[title];
-    res.send(post);
+    var post = posts[title] || {};
+    res.render('post', { post: post});
  }
 });
 
-app.listen(3000, function(){
- console.log("The frontend server is running on port 3000!");
+app.listen(1337, function(){
+ console.log("The frontend server is running on port 1337!");
 });
